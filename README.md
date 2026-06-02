@@ -1,8 +1,3 @@
-# App-pass-seguro
-Claro. Como este proyecto es académico y además te servirá para documentar el desarrollo, te recomiendo un README que explique no solo cómo ejecutarlo, sino también el objetivo de ciberseguridad y la comparación entre ambos métodos de autenticación.
-
----
-
 # Sistema de Comparación de Autenticación Segura e Insegura
 
 ## Descripción
