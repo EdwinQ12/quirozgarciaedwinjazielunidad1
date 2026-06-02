@@ -1,0 +1,104 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+    <div class="container">
+
+        <a class="navbar-brand" href="/">
+            Un Rayito de Sol
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#menu">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <div class="collapse navbar-collapse" id="menu">
+
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/nosotros">Nosotros</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/servicios">Servicios</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/especialistas">Especialistas</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/contacto">Contacto</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/ayuda">Ayuda</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/mapa-sitio">Mapa</a>
+                </li>
+            </ul>
+
+            <form
+                class="d-flex me-3"
+                action="/buscar"
+                method="GET">
+
+                <input
+                    class="form-control me-2"
+                    type="search"
+                    name="q"
+                    placeholder="Buscar"
+                    required>
+
+                <button
+                    class="btn btn-outline-light"
+                    type="submit">
+                    Buscar
+                </button>
+
+            </form>
+            <div class="d-flex">
+
+                <% if(usuario){ %>
+
+                    <a href="/dashboard"
+                    class="btn btn-warning me-2">
+                        Perfil
+                    </a>
+
+                    <a href="/buzon"
+                    class="btn btn-info me-2">
+                        Buzón
+                    </a>
+
+                    <a href="/chat"
+                    class="btn btn-secondary me-2">
+                        Chat
+                    </a>
+
+                    <a href="/logout"
+                    class="btn btn-danger">
+                        Cerrar Sesión
+                    </a>
+
+                <% } else { %>
+
+                    <a href="/registro" class="btn btn-warning me-2">Registrarse</a>   
+
+                    <a href="/login" class="btn btn-light">Iniciar Sesión</a>
+
+                <% } %>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>

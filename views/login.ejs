@@ -1,0 +1,60 @@
+<%- include('partials/header', { titulo: 'Login' }) %>
+<%- include('partials/navbar') %>
+
+
+    <div class="container mt-5">
+
+        <div class="card p-4 shadow-sm">
+
+            <h2 class="text-success mb-4">
+                Login
+            </h2>
+
+            <form action="/login" method="POST">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Correo
+                    </label>
+
+                    <input
+                        type="email"
+                        name="correo"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Contraseña
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-success">Iniciar Sesión</button>
+                <a href="/"class="btn btn-success">Volver</a>
+
+                <a href="/recuperar">
+                    ¿Olvidaste tu contraseña?
+                </a>
+
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,70 @@
+<%- include('partials/header', { titulo: titulo }) %>
+<%- include('partials/navbar') %>
+
+<div class="container mt-5">
+
+    <div class="card shadow-sm p-4">
+
+        <h1 class="text-primary mb-4">
+            Chat
+        </h1>
+
+        <form action="/chat" method="POST">
+
+            <div class="input-group mb-4">
+
+                <input
+                    type="text"
+                    name="mensaje"
+                    class="form-control"
+                    placeholder="Escribe un mensaje..."
+                    required>
+
+                <button
+                    class="btn btn-primary"
+                    type="submit">
+
+                    Enviar
+
+                </button>
+
+            </div>
+
+        </form>
+
+        <hr>
+
+        <% mensajes.forEach(mensaje => { %>
+
+            <div class="card mb-3">
+
+                <div class="card-body">
+
+                    <strong>
+                        <%= mensaje.usuario %>
+                    </strong>
+
+                    <br>
+
+                    <%= mensaje.mensaje %>
+
+                    <br>
+
+                    <small class="text-muted">
+
+                        <%= new Date(mensaje.fecha)
+                        .toLocaleString() %>
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        <% }) %>
+
+    </div>
+
+</div>
+
+<%- include('partials/footer') %>

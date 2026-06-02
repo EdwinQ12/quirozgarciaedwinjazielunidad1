@@ -1,0 +1,39 @@
+<%- include('partials/header', { titulo: titulo }) %>
+<%- include('partials/navbar') %>
+
+<div class="container mt-5">
+
+    <div class="card shadow-sm p-4">
+
+        <h1 class="text-primary">Recuperar Contraseña</h1>
+
+        <form>
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Correo Electrónico
+                </label>
+
+                <input
+                    type="email"
+                    class="form-control"
+                    required>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-primary">
+
+                Recuperar
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<%- include('partials/footer') %>

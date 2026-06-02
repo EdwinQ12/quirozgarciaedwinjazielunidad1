@@ -1,0 +1,56 @@
+<%- include('partials/header', { titulo: 'registro' }) %>
+<%- include('partials/navbar') %>
+
+    <div class="container mt-5">
+
+        <div class="card p-4 shadow-sm">
+
+            <h2 class="text-success mb-4">Registro</h2>
+            <form action="/registro" method="POST">
+
+                <div class="mb-3">
+                    <label class="form-label">Nombre completo</label>
+                    <input
+                        type="text"
+                        name="nombre"
+                        class="form-control"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Correo</label>
+                    <input
+                        type="email"
+                        name="correo"
+                        class="form-control"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        minlength="8"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <div class="g-recaptcha" data-sitekey="<%= siteKey %>"></div>
+                </div>
+
+                <button
+                    type="submit" class="btn btn-success">Registrar Usuario
+                </button>
+
+                <a href="/"class="btn btn-secondary">Volver</a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+

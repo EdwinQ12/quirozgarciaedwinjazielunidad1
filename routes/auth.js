@@ -1,25 +1,23 @@
+//routes/auth.js
 const express = require('express');
 const router = express.Router();
 const conexion = require('../database/conexion');
-const crypto = require('crypto');
 const bcrypt = require('bcrypt');
-const { protegerRuta } = require('./middleware');
+const axios = require('axios');
+//const { protegerRuta } = require('./middleware');
 
 router.get('/', (req, res) => {
-    res.render('inicio');
+    res.render('index');
 });
 
-router.get('/login-inseguro', (req, res) => {
-    res.render('login-inseguro');
-});
-
-router.post('/login-seguro', async (req, res) => {
-    const correo = req.body.correo;
-    const contraseña = req.body.contraseña;
+//aqui se hace el login del usuario, se compara la contraseña ingresada con la contraseña encriptada en la base de datos usando bcrypt.compare
+router.post('/login', async (req, res) => {
+const correo = req.body.correo;
+const password = req.body.password;
 
     try {
         const resultado = await conexion.query(
-            `SELECT * FROM usuarios_seguros WHERE correo = $1`,
+            `SELECT * FROM usuarios WHERE correo = $1`,
             [correo]
         );
 
@@ -28,11 +26,12 @@ router.post('/login-seguro', async (req, res) => {
         }
 
         const usuario = resultado.rows[0];
-        const acceso = await bcrypt.compare(contraseña, usuario.contraseña);
+        const acceso = await bcrypt.compare(password,usuario.password);
 
         if (acceso) {
             req.session.usuario = usuario.correo;
-            req.session.tipo = 'Seguro Bcrypt';
+            req.session.nombre = usuario.nombre;
+            req.session.correo = usuario.correo;
             res.redirect('/dashboard');
         } else {
             res.send('Contraseña incorrecta');
@@ -43,90 +42,57 @@ router.post('/login-seguro', async (req, res) => {
     }
 });
 
-router.get('/login-seguro', (req, res) => {
-    res.render('login-seguro');
+router.get('/login', (req, res) => {
+    res.render('login');
 });
 
-router.get('/registro-inseguro', (req, res) => {
-    res.render('registro-inseguro');
+
+router.get('/registro', (req, res) => {
+    res.render('registro', {
+        siteKey: process.env.RECAPTCHA_SITE_KEY
+    });
 });
 
-router.get('/registro-seguro', (req, res) => {
-    res.render('registro-seguro');
-});
-
-router.post('/login-inseguro', async (req, res) => {
+//en esta parte se hace el registro del usuario, se encripta la contraseña con bcrypt y se guarda en la base de datos
+router.post('/registro', async (req, res) => {
+    const nombre = req.body.nombre;
     const correo = req.body.correo;
-    const contraseña = req.body.contraseña;
+    const password = req.body.password;
 
-    const hash = crypto.createHash('sha256').update(contraseña).digest('hex');
-
-    try {
-        const resultado = await conexion.query(
-            `SELECT * FROM usuarios_inseguros WHERE correo = $1`,
-            [correo]
-        );
-
-        if (resultado.rows.length === 0) {
-            return res.send('Usuario no encontrado');
-        }
-
-        const usuario = resultado.rows[0];
-
-        if (usuario.contraseña === hash) {
-            req.session.usuario = usuario.correo;
-            req.session.tipo = 'Inseguro SHA256';
-            res.redirect('/dashboard');
-        } else {
-            res.send('Contraseña incorrecta');
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(500).send('Error en el login');
+    // Verificar captcha
+    const captcha= req.body['g-recaptcha-response'];
+    if (!captcha) {
+        return res.status(400).send('Por favor, completa el captcha');
     }
-});
 
-router.post('/registro-inseguro', async (req, res) => {
-    const correo = req.body.correo;
-    const contraseña = req.body.contraseña;
-
-    const hash = crypto.createHash('sha256').update(contraseña).digest('hex');
-
-    console.log('Correo:', correo);
-    console.log('Hash SHA256:', hash);
-
-    try {
-        await conexion.query(
-            `INSERT INTO usuarios_inseguros (correo, contraseña) VALUES ($1, $2)`,
-            [correo, hash]
-        );
-
-        res.redirect('/login-inseguro');
-    } catch (error) {
-        console.log(error);
-        if (error && error.code === '23505') {
-            return res.status(400).send('El correo ya está registrado');
+// Verificar la respuesta del captcha con Google
+    const verificarCaptcha = await axios.post(
+        `https://www.google.com/recaptcha/api/siteverify`, 
+        null, 
+        {
+            params: {
+                secret: process.env.RECAPTCHA_SECRET_KEY,
+                response: captcha
+            }
         }
-        res.status(500).send('Error en el registro');
+    );
+    if (!verificarCaptcha.data.success) {
+        return res.status(400).send('Captcha inválido');
     }
-});
 
-router.post('/registro-seguro', async (req, res) => {
-    const correo = req.body.correo;
-    const contraseña = req.body.contraseña;
-
+    //cifrar la contraseña con bcrypt antes de guardarla en la BD
     try {
-        const hash = await bcrypt.hash(contraseña, 10);
+        const hash = await bcrypt.hash(password, 10);
 
         console.log('Correo:', correo);
         console.log('Hash bcrypt:', hash);
 
         await conexion.query(
-            `INSERT INTO usuarios_seguros (correo, contraseña) VALUES ($1, $2)`,
-            [correo, hash]
+            `INSERT INTO usuarios (nombre, correo, password) VALUES ($1, $2, $3)`,
+            [nombre, correo, hash]
         );
 
-        res.redirect('/login-seguro');
+        res.redirect('/login');
     } catch (error) {
         console.log(error);
         if (error && error.code === '23505') {
