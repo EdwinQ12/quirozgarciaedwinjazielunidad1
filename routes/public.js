@@ -61,7 +61,7 @@ router.get('/buscar', (req, res) => {
         registro: '/registro',
         login: '/login',
         recuperar: '/recuperar',
-        mapa: '/mapa-sitio'
+        mapa: '/mapa-sitio',
 
     };
 

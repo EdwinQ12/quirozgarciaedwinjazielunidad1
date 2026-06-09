@@ -7,7 +7,7 @@
 
         <h1 class="text-primary">Recuperar Contraseña</h1>
 
-        <form>
+        <form action="/recuperar" method="POST">
 
             <div class="mb-3">
 
@@ -17,6 +17,7 @@
 
                 <input
                     type="email"
+                    name="correo"
                     class="form-control"
                     required>
 
@@ -35,5 +36,7 @@
     </div>
 
 </div>
+
+<%- include('partials/alerts') %>
 
 <%- include('partials/footer') %>

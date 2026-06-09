@@ -28,6 +28,12 @@ app.use(
         saveUninitialized: false
     })
 );
+// Middleware para hacer mensajes flash disponibles en las vistas
+    app.use((req, res, next) => {
+        res.locals.mensaje = req.session.mensaje || null;
+        delete req.session.mensaje;
+        next();
+});
 
 // Middleware para hacer variables de sesión disponibles en las vistas
 app.use((req, res, next) => {

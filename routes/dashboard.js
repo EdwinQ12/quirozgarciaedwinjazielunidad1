@@ -2,20 +2,22 @@ const express = require('express');
 const router = express.Router();
 const conexion = require('../database/conexion');
 const { protegerRuta } = require('./middleware');
+const Mensaje = require('../models/Mensaje');
+const Chat = require('../models/Chat');
 
 router.get('/dashboard', protegerRuta, (req, res) => {
+    
     res.render('dashboard', {
         nombre: req.session.nombre,
-        correo: req.session.correo
+        correo: req.session.correo,
     });
 });
 
 //ruta para el buzon de sugerencias, que es una pagina protegida
 router.get('/buzon', protegerRuta, (req, res) => {
-
     res.render('buzon', {
         titulo: 'Buzón',
-        nombre: req.session.nombre
+        nombre: req.session.nombre,
     });
 
 });
@@ -27,27 +29,27 @@ router.post('/buzon', protegerRuta, async (req, res) => {
     const asunto = req.body.asunto;
     const mensaje = req.body.mensaje;
 
+    const nuevoMensaje = new Mensaje(nombre, asunto, mensaje);
+
     try {
 
         await conexion.query(
-
             `INSERT INTO buzon
             (nombre, asunto, mensaje)
             VALUES ($1, $2, $3)`,
-
-            [nombre, asunto, mensaje]
-
+            [nuevoMensaje.nombre, nuevoMensaje.asunto, nuevoMensaje.mensaje]
         );
 
-        res.send('Mensaje enviado correctamente');
+
+        req.session.mensaje = { tipo: 'success', texto: 'Mensaje enviado correctamente' };
+        res.redirect('/buzon');
 
     } catch (error) {
 
         console.log(error);
 
-        res.status(500).send(
-            'Error al enviar mensaje'
-        );
+        req.session.mensaje = { tipo: 'error', texto: 'Error al enviar mensaje' };
+        res.redirect('/buzon');
 
     }
 
@@ -68,6 +70,7 @@ router.get('/chat', protegerRuta, async (req, res) => {
             nombre: req.session.nombre,
             mensajes: mensajes.rows
         });
+
 
     } catch (error) {
 

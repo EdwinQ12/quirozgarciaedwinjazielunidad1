@@ -1,0 +1,19 @@
+.swal2-icon.swal2-success {
+  background-color: #28a745 !important; /* verde éxito */
+  color: white !important;
+}
+
+.swal2-icon.swal2-error {
+  background-color: #dc3545 !important; /* rojo error */
+  color: white !important;
+}
+
+.swal2-icon.swal2-warning {
+  background-color: #ffc107 !important; /* amarillo advertencia */
+  color: black !important;
+}
+
+.swal2-icon.swal2-info {
+  background-color: #17a2b8 !important; /* azul info */
+  color: white !important;
+}

@@ -1,1 +1,1 @@
-aplicacion de practica de consultorio
+>>>>>>> 2992126 (tercer commit se modificaron varias paginas en diseño, usabilidad, seguridad. control de notificaciones, validacion de credenciales y tambien se agregaron nuevas paginas que agregan funcionalidad a la aplicacion)
